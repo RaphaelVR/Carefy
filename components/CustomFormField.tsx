@@ -43,14 +43,16 @@ const CustomFormField = (props: CustomProps) => {
                     <FormLabel>{label}</FormLabel>
                 )}
 
-                <RenderInput field={field} props={props}/>
+                <RenderField field={field} props={props}/>
+
+                <FormMessage className='shad-error'/>
             </FormItem>
         )}
     />
   )
 }
 
-const RenderInput = ({ field, props }: {field: any, props: CustomProps }) => {
+const RenderField = ({ field, props }: {field: any, props: CustomProps }) => {
     return (
         <Input
             type='text'
