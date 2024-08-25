@@ -7,6 +7,7 @@ import { z } from "zod"
 import { Button } from "@/components/ui/button"
 import { Form } from "@/components/ui/form"
 import CustomFormField from "../CustomFormField"
+import "react-phone-number-input/style.css";
 
 export enum FormFieldType {
     INPUT = "input",
@@ -55,6 +56,22 @@ const PatientForm = () => {
             placeholder="John Doe"
             iconSrc="/assets/icons/user.svg"
             iconAlt="user"
+        />
+        <CustomFormField 
+            fieldType={FormFieldType.INPUT}
+            control={form.control}
+            name="email"
+            label="Email"
+            placeholder="johndoe@mail.com"
+            iconSrc="/assets/icons/email.svg"
+            iconAlt="email"
+        />
+        <CustomFormField 
+            fieldType={FormFieldType.PHONE_INPUT}
+            control={form.control}
+            name="phone"
+            label="Phone Number"
+            placeholder="(49) 123 456 789"
         />
         
         <Button type="submit">Submit</Button>
