@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
-import { Button } from "@/components/ui/button"
+// import { Button } from "@/components/ui/button"
 import { Form } from "@/components/ui/form"
 import CustomFormField from "../CustomFormField"
 import "react-phone-number-input/style.css";
@@ -36,21 +36,20 @@ const PatientForm = () => {
     },
   })
  
-    const onSubmit = async ({ name, email, phone }: z.infer<typeof UserFormValidation>) => {  
-    setIsLoading(true);
-    
-    try {
-      const userData = { name, email, phone };
+async function onSubmit({ name, email, phone }: z.infer<typeof UserFormValidation>) {
+  setIsLoading(true);
 
-      const user = await createUser(userData);
+  try {
+    const userData = { name, email, phone };
 
-      if(user) router.push(`/patients/${user.$id}/register`);
-    } catch (error) {
-      console.error(error)
-    }
+    const user = await createUser(userData);    
 
-    setIsLoading(false);
-  };
+    if (user) 
+      router.push(`/patients/${user.$id}/register`)
+  } catch (error: any) {
+    console.error(error);
+  }
+}
   
   return (
     <Form {...form}>
