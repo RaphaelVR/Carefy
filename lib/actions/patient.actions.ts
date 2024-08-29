@@ -15,8 +15,7 @@ import {
 import { parseStringify } from "../utils";
 
 export const createUser = async (user: CreateUserParams) => {
-  try {
-    // Create new user -> https://appwrite.io/docs/references/1.5.x/server-nodejs/users#create
+  try {    
     const newuser = await users.create(
       ID.unique(),
       user.email,
@@ -37,3 +36,13 @@ export const createUser = async (user: CreateUserParams) => {
     console.error("An error occurred while creating a new user:", error);
   }
 };
+
+export const getUser = async (userId: string) => {
+  try {
+    const user = await users.get(userId);
+
+    return parseStringify(user);
+  } catch (error: any) {
+    console.error("An error occurred while fetching user details:", error);
+  }
+}
