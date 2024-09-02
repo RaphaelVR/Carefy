@@ -15,10 +15,12 @@ import { useRouter } from "next/navigation"
 import { createUser } from "@/lib/actions/patient.actions"
 import { FormFieldType } from "./PatientForm"
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group"
-import { Doctors, GenderOptions } from "@/constants"
+import { Doctors, GenderOptions, IdentificationTypes } from "@/constants"
 import { Label } from "../ui/label"
 import { SelectItem } from "../ui/select"
 import Image from "next/image"
+import FileUploader from "../FileUploader"
+
 
  
 const RegisterForm = ({ user }: { user: User }) => {
@@ -266,6 +268,46 @@ async function onSubmit({ name, email, phone }: z.infer<typeof UserFormValidatio
                 </h2>
             </div>
         </section>
+
+        <CustomFormField 
+            fieldType={FormFieldType.SELECT}
+            control={form.control}
+            name="identificationType"
+            label="Identification Type"
+            placeholder="Select an Identification Type"
+        >
+            {IdentificationTypes.map((type) => (
+                <SelectItem 
+                    key={type}
+                    value={type}    
+                >
+                    {type}                    
+                </SelectItem>
+            ))}    
+        </CustomFormField>
+
+        <CustomFormField 
+                fieldType={FormFieldType.INPUT}
+                control={form.control}
+                name="identificationNumber"
+                label="Identification Number"
+                placeholder="123456789"
+            />
+
+            <CustomFormField 
+                fieldType={FormFieldType.SKELETON}
+                control={form.control}
+                name="identificationDocument"
+                label="Identification Document"
+                renderSkeleton={(field) => (
+                    <FormControl>
+                        <FileUploader 
+                            files={field.value}
+                            onChange={field.onChange}
+                        />
+                    </FormControl>
+                )}
+            />
         
         <SubmitButton isLoading={isLoading}>
           Get Started
