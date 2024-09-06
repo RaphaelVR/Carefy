@@ -10,12 +10,12 @@ import CustomFormField from "../CustomFormField"
 import "react-phone-number-input/style.css";
 import SubmitButton from "../SubmitButton"
 import { useState } from "react"
-import { UserFormValidation } from "@/lib/validation"
+import { PatientFormValidation } from "@/lib/validation"
 import { useRouter } from "next/navigation"
-import { createUser } from "@/lib/actions/patient.actions"
+import { registerPatient } from "@/lib/actions/patient.actions"
 import { FormFieldType } from "./PatientForm"
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group"
-import { Doctors, GenderOptions, IdentificationTypes } from "@/constants"
+import { Doctors, GenderOptions, IdentificationTypes, PatientFormDefaultValues } from "@/constants"
 import { Label } from "../ui/label"
 import { SelectItem } from "../ui/select"
 import Image from "next/image"
@@ -27,28 +27,73 @@ const RegisterForm = ({ user }: { user: User }) => {
 
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false)  
-  const form = useForm<z.infer<typeof UserFormValidation>>({
-    resolver: zodResolver(UserFormValidation),
+
+  const form = useForm<z.infer<typeof PatientFormValidation>>({
+    resolver: zodResolver(PatientFormValidation),
     defaultValues: {
-      name: "",
-      email: "",
-      phone: "",
+      ...PatientFormDefaultValues,
+      name: user.name,
+      email: user.email,
+      phone: user.phone,
     },
-  })
+  });
  
-async function onSubmit({ name, email, phone }: z.infer<typeof UserFormValidation>) {
-  setIsLoading(true);
+  const onSubmit = async (values: z.infer<typeof PatientFormValidation>) => {
+    setIsLoading(true);
+
+  let formData;
+
+  if(
+    values.identificationDocument && 
+    values.identificationDocument?.length > 0
+    ) {
+    const blobFile = new Blob([values.identificationDocument[0]], {
+        type: values.identificationDocument[0].type,
+    })
+
+    formData = new FormData();
+    formData.append("blobFile", blobFile);
+    formData.append("fileName", values.identificationDocument[0].name);
+  }
 
   try {
-    const userData = { name, email, phone };
+    const patient = {
+        userId: user.$id,
+        name: values.name,
+        email: values.email,
+        phone: values.phone,
+        birthDate: new Date(values.birthDate),
+        gender: values.gender,
+        address: values.address,
+        occupation: values.occupation,
+        emergencyContactName: values.emergencyContactName,
+        emergencyContactNumber: values.emergencyContactNumber,
+        primaryPhysician: values.primaryPhysician,
+        insuranceProvider: values.insuranceProvider,
+        insurancePolicyNumber: values.insurancePolicyNumber,
+        allergies: values.allergies,
+        currentMedication: values.currentMedication,
+        familyMedicalHistory: values.familyMedicalHistory,
+        pastMedicalHistory: values.pastMedicalHistory,
+        identificationType: values.identificationType,
+        identificationNumber: values.identificationNumber,
+        identificationDocument: values.identificationDocument
+          ? formData
+          : undefined,
+        privacyConsent: values.privacyConsent, 
+    };
+    
+    const newPatient = await registerPatient(patient);
+    
+    if(newPatient !== undefined) {
+        router.push(`/patients/${user.$id}/new-appointment`);
+    }
 
-    const user = await createUser(userData);    
-
-    if (user) 
-      router.push(`/patients/${user.$id}/register`)
   } catch (error: any) {
-    console.error(error);
+    console.log(error);
   }
+
+  setIsLoading(false);
 };
   
   return (
@@ -98,7 +143,7 @@ async function onSubmit({ name, email, phone }: z.infer<typeof UserFormValidatio
             />
         </div>
 
-        <div className="flex flex-col gap-3 xl:flex-row">
+        <div className="flex flex-col gap-6 xl:flex-row">
             <CustomFormField 
                 fieldType={FormFieldType.DATE_PICKER}
                 control={form.control}
