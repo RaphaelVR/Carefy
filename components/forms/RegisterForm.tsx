@@ -110,13 +110,13 @@ const RegisterForm = ({ user }: { user: User }) => {
                     Let us know more about yourself.
                 </p>
             </section>
+
             <section className="space-y-6">
                 <div className="mb-9 space-y-1">                
                     <h2 className="sub-header">
                         Personal Information
                     </h2>
-                </div>
-            </section>
+                </div>            
 
             <CustomFormField 
                 fieldType={FormFieldType.INPUT}
@@ -186,16 +186,14 @@ const RegisterForm = ({ user }: { user: User }) => {
                         </FormControl>
                     )}
                 />
-            </div>
-
-            {/* -- */}
+            </div>            
 
             <div className="flex flex-col gap-6 xl:flex-row">
                 <CustomFormField 
                     fieldType={FormFieldType.INPUT}
                     control={form.control}
-                    name="adress"
-                    label="Adress"
+                    name="address"
+                    label="Address"
                     placeholder="Street, Number, City"                
                 />
                 <CustomFormField 
@@ -223,38 +221,36 @@ const RegisterForm = ({ user }: { user: User }) => {
                     placeholder="(49) 123 456 789"
                 />
             </div>
+            </section>            
 
             <section className="space-y-6">
                 <div className="mb-9 space-y-1">                
                     <h2 className="sub-header">
                         Medical Information
                     </h2>
-                </div>
-            </section>
+                </div>            
 
             <CustomFormField 
                 fieldType={FormFieldType.SELECT}
                 control={form.control}
                 name="primaryPhysician"
-                label="Primary Physician"
+                label="Primary care Physician"
                 placeholder="Select a physician"
             >
-                {Doctors.map((doctor) => (
+                {Doctors.map((doctor, i) => (
                     <SelectItem 
-                        key={doctor.name}
-                        value={doctor.name}    
+                        key={doctor.name + i} 
+                        value={doctor.name}
                     >
                         <div className="flex cursor-pointer items-center gap-2">
-                            <Image 
+                            <Image
                                 src={doctor.image}
-                                height={32}
                                 width={32}
-                                alt={doctor.name}
+                                height={32}
+                                alt="doctor"
                                 className="rounded-full border border-dark-500"
                             />
-                            <p>
-                                {doctor.name}
-                            </p>
+                            <p>{doctor.name}</p>
                         </div>
                     </SelectItem>
                 ))}    
@@ -288,8 +284,8 @@ const RegisterForm = ({ user }: { user: User }) => {
                 <CustomFormField 
                     fieldType={FormFieldType.TEXTAREA}
                     control={form.control}
-                    name="currentMedications"
-                    label="Current Medications"
+                    name="currentMedication"
+                    label="Current Medication"
                     placeholder="Medications"
                 />
             </div>
@@ -310,14 +306,16 @@ const RegisterForm = ({ user }: { user: User }) => {
                     placeholder="Medical conditions"
                 />
             </div>
+            </section>
+
+            {/* // */}
 
             <section className="space-y-6">
                 <div className="mb-9 space-y-1">                
                     <h2 className="sub-header">
-                        Personal Information
+                        Identification and Verification
                     </h2>
-                </div>
-            </section>
+                </div>            
 
             <CustomFormField 
                 fieldType={FormFieldType.SELECT}
@@ -326,14 +324,14 @@ const RegisterForm = ({ user }: { user: User }) => {
                 label="Identification Type"
                 placeholder="Select an Identification Type"
             >
-                {IdentificationTypes.map((type) => (
+                {IdentificationTypes.map((type, i) => (
                     <SelectItem 
-                        key={type}
-                        value={type}    
+                        key={type + i} 
+                        value={type}
                     >
-                        {type}                    
+                        {type}
                     </SelectItem>
-                ))}    
+                ))}   
             </CustomFormField>
 
             <CustomFormField 
@@ -358,38 +356,41 @@ const RegisterForm = ({ user }: { user: User }) => {
                     </FormControl>
                 )}
             />
+            </section>
 
             <section className="space-y-6">
                 <div className="mb-9 space-y-1">                
                     <h2 className="sub-header">
                         Consent and Privacy
                     </h2>
-                </div>
-            </section>
+                </div>            
 
             <CustomFormField 
                 fieldType={FormFieldType.CHECKBOX}
                 control={form.control}
                 name="treatmentConsent"
-                label="I consent to treatment"            
+                label="I consent to receive treatment for my health condition."            
             />
 
             <CustomFormField 
                 fieldType={FormFieldType.CHECKBOX}
                 control={form.control}
                 name="disclosureConsent"
-                label="I consent to disclosure of information"            
+                label="I consent to the use and disclosure of my health
+            information for treatment purposes."            
             />
 
             <CustomFormField 
                 fieldType={FormFieldType.CHECKBOX}
                 control={form.control}
                 name="privacyConsent"
-                label="I consent to privacy policy"            
+                label="I acknowledge that I have reviewed and agree to the
+            privacy policy."            
             />
+            </section>
         
             <SubmitButton isLoading={isLoading}>
-            Get Started
+                Submit and Continue
             </SubmitButton>
         </form>
     </Form>
