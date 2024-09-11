@@ -8,12 +8,13 @@ import CustomFormField from "../CustomFormField"
 import "react-phone-number-input/style.css";
 import SubmitButton from "../SubmitButton"
 import { useState } from "react"
-import { AppointmentFormValidation } from "@/lib/validation"
+import { getAppointmentSchema } from "@/lib/validation"
 import { useRouter } from "next/navigation"
 import { createUser } from "@/lib/actions/patient.actions"
 import { Doctors } from "@/constants"
 import { SelectItem } from "../ui/select"
 import Image from "next/image"
+import { createAppointment } from "@/lib/actions/appointment.actions"
 
 export enum FormFieldType {
     INPUT = "input",
@@ -35,6 +36,8 @@ const AppointmentForm = ({
 
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false)  
+
+  const AppointmentFormValidation = getAppointmentSchema(type);
 
   const form = useForm<z.infer<typeof AppointmentFormValidation>>({
     resolver: zodResolver(AppointmentFormValidation),
@@ -84,9 +87,15 @@ async function onSubmit(values: z.infer<typeof AppointmentFormValidation>) {
         patient: patientId,
         primaryPhysician: values.primaryPhysician,
         schedule: new Date(values.schedule),
-        reason: values.reason,
+        reason: values.reason!,
         note: values.note,
         status: status as Status, 
+      }
+      const appointment = await createAppointment(appointmentData);
+
+      if(appointment) {
+        form.reset();
+        router.push(`/patients/${userId}/new-appointment/success?appointmentId=${appointment.id}`);
       }
     }
   } catch (error) {
