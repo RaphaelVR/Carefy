@@ -1,11 +1,13 @@
-import AppointmentForm from "@/components/forms/appointment";
+import AppointmentForm from "@/components/forms/appointmentForm";
 import PatientForm from "@/components/forms/PatientForm";
 import { Button } from "@/components/ui/button";
+import { getPatient } from "@/lib/actions/patient.actions";
 
 import Image from "next/image";
 import Link from "next/link";
 
-export default function NewAppointment() {
+export default async function NewAppointment({ params: {userId }}: SearchParamProps) {
+  const patient = await getPatient(userId);
   return (
     <div className="flex h-screen max-h-screen">
       <section className="remove-scrollbar container my-auto">
@@ -18,9 +20,13 @@ export default function NewAppointment() {
             className="mb-12 h-10 w-fit"
           />
 
-          <AppointmentForm />
+          <AppointmentForm
+            type="create"
+            userId={userId}
+            patientId={patient.$id}
+          />
 
-          <p className="justify-items-end text-dark-600 xl:text-left">
+          <p className="copiright mt-10 py-12">
             © 2024 Carefy
             </p>            
         </div>
