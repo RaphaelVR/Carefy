@@ -1,7 +1,6 @@
 "use server";
 
 import { ID, Query } from "node-appwrite";
-
 import {
   BUCKET_ID,
   DATABASE_ID,
@@ -13,7 +12,6 @@ import {
   users,
 } from "../appwrite.config";
 import { parseStringify } from "../utils";
-
 import { InputFile } from "node-appwrite/file";
 
 export const createUser = async (user: CreateUserParams) => {
@@ -61,7 +59,7 @@ export const getPatient = async (userId: string) => {
 
     return parseStringify(patients.documents[0]);
   } catch (error: any) {
-    console.error("An error occurred while fetching patient details:", error);
+    console.error("An error occurred while fetching  details:", error);
   }
 };
 
