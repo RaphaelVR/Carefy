@@ -32,3 +32,4 @@ export const getAppointments = async (appointmentId: string) => {
     console.log("An error occurred while fetching appointment details:", error);       
   }
 }
+
