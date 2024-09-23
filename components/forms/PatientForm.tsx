@@ -68,7 +68,7 @@ async function onSubmit({ name, email, phone }: z.infer<typeof UserFormValidatio
             control={form.control}
             name="name"
             label="Full name"
-            placeholder="John Doe"
+            placeholder="Your name"
             iconSrc="/assets/icons/user.svg"
             iconAlt="user"
         />
@@ -77,7 +77,7 @@ async function onSubmit({ name, email, phone }: z.infer<typeof UserFormValidatio
             control={form.control}
             name="email"
             label="Email"
-            placeholder="johndoe@mail.com"
+            placeholder="your-email@mail.com"
             iconSrc="/assets/icons/email.svg"
             iconAlt="email"
         />

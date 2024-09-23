@@ -19,7 +19,7 @@ const Admin = async () => {
                 className='cursor-pointer'
             >
                 <Image
-                    src="/assets/icons/logo-full.svg"
+                    src="/assets/icons/logo-icon.svg"
                     height={50}
                     width={150}
                     alt="logo"
